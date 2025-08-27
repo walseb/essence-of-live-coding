@@ -124,7 +124,7 @@ constructorMigration specific = Migration $ \a b -> do
         & sequence
   flip evalStateT fieldSetters $ fromConstrM tryOneField matchingConstructor
 
-tryOneField :: Data a => StateT [GenericR' Maybe] Maybe a
+tryOneField :: Data a => StateT [LiveCoding.Migrate.GenericR' Maybe] Maybe a
 tryOneField = do
   (field : fields) <- get
   put fields
@@ -135,7 +135,7 @@ getChildrenSetters specific = gmapQ $ \child -> GT $ flip (runSafeMigration $ tr
 
 newtype GenericR' m = GR { unGR :: GenericR m }
 
-getChildrenMaybe :: Data a => a -> [GenericR' Maybe]
+getChildrenMaybe :: Data a => a -> [LiveCoding.Migrate.GenericR' Maybe]
 getChildrenMaybe = gmapQ $ \child -> GR $ cast child
 
 setChildren :: Data a => [GenericT'] -> a -> a
